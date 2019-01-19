@@ -1,4 +1,8 @@
 'use strict';
+var Twit  =  require('twit');
+var config = require('./config.json');
+var T = new Twit(config);
+
 
 let Main = {
 
@@ -38,8 +42,8 @@ let Main = {
 
         // Types depending on current service context
         let currentTypes = this.types[this.service];
-        string = string.trim();
-        string = string.toLowerCase();
+        string = string.trim().toLowerCase();
+
 
         // Check for ignored starting string
         for (var i = 0; i < currentTypes["ignoring"].length; i++) {
@@ -76,4 +80,32 @@ let Main = {
 
 };
 
+
+//////////
+// Twitter requests handler
+//////////
+var TwitterHandler = {
+
+    // screen_name is the twitter handle of the wanted twitter account
+    // count is the number of tweet that will be returned,
+    //
+    params: {
+        screen_name: 'stm_Orange',
+        count: 1,
+        exclude_replies: true
+    },
+
+    run: function(){
+        T.get('/statuses/user_timeline', this.params, this.callback);
+    },
+
+    callback: function(err, data) {
+        var input = data[0].text;
+        var alexaResponse = Main.read(input);
+        console.log(alexaResponse);     // TODO: Return to Jon
+    },
+};
+
+
+// testing
 console.log(Main.read("Normal functionasdpasd asdof for 15 miniutes"));
