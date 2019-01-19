@@ -1,0 +1,37 @@
+{
+  "metro": {
+    "normal": [
+      "normal",
+      "service normal"
+    ],
+
+    "resuming": [
+      "service resuming",
+      "service gradually resuming",
+      "gradually resuming",
+      "reprise graduelle",
+      "[end of disruption]",
+      "end of disruption",
+      "[fin de la perturbation]",
+      "fin de la perturbation"
+    ],
+
+    "down": [
+      "shutdown",
+      "arrêt",
+      "[service disruption]",
+      "service disruption"
+    ],
+
+    "ignoring": [
+      "état du service métro :",
+      "métro service status :"
+    ]
+  },
+
+
+
+  "trains": {
+
+  }
+}

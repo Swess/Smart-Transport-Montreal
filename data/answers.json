@@ -1,0 +1,30 @@
+{
+  "metro": {
+    "normal": [
+      "The service is normal"
+    ],
+
+    "resuming": [
+      "The service is resuming"
+    ],
+
+    "down": [
+      "The service is down"
+    ]
+  },
+
+
+  "trains": {
+    "normal": [
+      "The service is normal"
+    ],
+
+    "resuming": [
+      "The service is resuming"
+    ],
+
+    "down": [
+      "The service is down"
+    ]
+  }
+}
