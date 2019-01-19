@@ -1,5 +1,5 @@
 'use strict';
-var Twit  =  require('twit');
+var Twit = require('twit');
 var config = require('./config.json');
 var T = new Twit(config);
 
@@ -7,6 +7,7 @@ var T = new Twit(config);
 let Main = {
 
     service: "metro",   // defaut service context
+    event: "normal",    // defaut event reading
 
     //////////
     // Initialization
@@ -21,13 +22,13 @@ let Main = {
 
     // Main interfacing communication
     message: function (twitter_handle, service) {
-        this.service = service;
+        if(typeof service !== "undefined")
+            this.service = service;
 
         if (!this.loaded)
             this.init();
 
-        // this.read();
-        return "alexa mesasge";
+        TwitterHandler.run(twitter_handle);     // Response is sent back by the callback
     },
 
 
@@ -90,22 +91,24 @@ var TwitterHandler = {
     // count is the number of tweet that will be returned,
     //
     params: {
-        screen_name: 'stm_Orange',
+        screen_name: 'stm_Orange',  // Defaut twitter handle
         count: 1,
         exclude_replies: true
     },
 
-    run: function(){
+    run: function (handle) {
+        this.params.screen_name = handle;
         T.get('/statuses/user_timeline', this.params, this.callback);
     },
 
-    callback: function(err, data) {
+    callback: function (err, data) {
         var input = data[0].text;
         var alexaResponse = Main.read(input);
-        console.log(alexaResponse);     // TODO: Return to Jon
+        console.log("Analysed : " + input);
+        console.log("Response : " + alexaResponse);     // TODO: Return to Jon
     },
 };
 
 
-// testing
-console.log(Main.read("Normal functionasdpasd asdof for 15 miniutes"));
+// Actual twitter request
+Main.message("Haboub72903512");
