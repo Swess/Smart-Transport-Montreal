@@ -1,0 +1,7 @@
+﻿route_id,agency_id,route_short_name,route_long_name,route_type,route_color,route_text_color
+2,TRAINS,DM,Deux-Montagnes,2,eea595,000000
+1,TRAINS,VH,Vaudreuil–Hudson,2,f16179,000000
+4,TRAINS,SJ,Saint-Jérôme,2,a2d586,000000
+3,TRAINS,SH,Mont-Saint-Hilaire,2,999ac6,000000
+5,TRAINS,CA,Candiac,2,5ab6b2,000000
+6,TRAINS,MA,Mascouche,2,ca5898,000000
