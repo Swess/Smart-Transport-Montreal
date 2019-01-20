@@ -66,7 +66,6 @@ let Main = {
                 }
             }
         }
-        console.log(this.time(string));
 
         return this.randomContextualAnswer(this.event);
     },
@@ -79,14 +78,6 @@ let Main = {
         var rand = Math.floor(Math.random() * this.answers[this.service][eventContext].length);
         return this.answers[this.service][eventContext][rand];
     },
-
-    time: function(text){
-    var matched = text.match('([0-9]|0[0-9]|1[0-9]|2[0-3])h[0-5][0-9]$');
-    console.log("this was matched " + matched) ;   
-    if(matched[0]){
-            return " Reprise prevue a " + matched ;
-        }
-    }
 
 };
 
@@ -117,9 +108,6 @@ var TwitterHandler = {
         console.log("Response : " + alexaResponse);     // TODO: Return to Jon
     },
 };
-
-
-
 
 
 // Actual twitter request
