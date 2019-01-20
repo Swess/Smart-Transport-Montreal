@@ -185,6 +185,7 @@ const MetroLineHandler = {
             "green": "stm_Verte",
             "yellow": "stm_Jaune",
             "blue": "stm_Bleue",
+            "purple": "Haboub72903512`"
         }
 
         let msg;
