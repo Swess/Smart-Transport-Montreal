@@ -1,30 +1,44 @@
 {
   "metro": {
     "normal": [
-      "The service is normal"
+      "Everything is normal.",
+      "The service is following normal scheduling.",
+      "Service is up and running. You are good to go."
     ],
 
     "resuming": [
-      "The service is resuming"
+      "The service is resuming.",
+      "Stopped, but gradually resuming.",
+      "Running slow.",
+      "Service is currently rebooting."
     ],
 
     "down": [
-      "The service is down"
+      "The service is down right now.",
+      "The line is not moving right now.",
+      "The line is down, but they are doing their best to get it running."
     ]
   },
 
 
   "trains": {
     "normal": [
-      "The service is normal"
+      "Everything is normal.",
+      "The service is following normal scheduling.",
+      "Service is up and running. You are good to go."
     ],
 
     "resuming": [
-      "The service is resuming"
+      "The service is resuming.",
+      "Stopped, but gradually resuming.",
+      "Running slow.",
+      "Service is currently rebooting."
     ],
 
     "down": [
-      "The service is down"
+      "The service is down right now.",
+      "The line is not moving right now.",
+      "The line is down, but they are doing their best to get it running."
     ]
   }
 }
