@@ -26,6 +26,143 @@ const MetroLineHandler = {
     handle(handlerInput) {
         const slots = handlerInput.requestEnvelope.request.intent.slots;
 
+        ///////////////////
+        // MAIN
+
+        let Main = {
+
+            service: "metro",   // defaut service context
+            event: "normal",    // defaut event reading
+
+            //////////
+            // Initialization
+            //////////
+            init: function () {
+                this.types = require("./data/types.json");
+                this.answers = require("./data/answers.json");
+                
+                this.loaded = true;
+            },
+
+
+            // Main interfacing communication
+            message: function (twitter_handle, service) {
+                if (typeof service !== "undefined")
+                    this.service = service;
+
+                if (!this.loaded)
+                    this.init();
+
+                TwitterHandler.run(twitter_handle).then(
+                    (ans) => {
+                        return JSON.stringify(ans);
+                    }
+                );     // Response is sent back by the callback
+
+            },
+
+            // Interprets a tweets and returns an corresponding vocal message
+            //////////
+            read: function (string) {
+                if (!this.loaded)
+                    this.init();
+
+                if (typeof string !== "string")
+                    return "Value is not a string";
+
+                // Types depending on current service context
+                let currentTypes = this.types[this.service];
+                string = string.trim().toLowerCase();
+
+
+                // Check for ignored starting string
+                for (var i = 0; i < currentTypes["ignoring"].length; i++) {
+                    if (string.startsWith(currentTypes["ignoring"][i])) {
+                        // Remove ignoring part
+                        string = string.replace(currentTypes["ignoring"][i], "");
+                    }
+                }
+                string = string.trim();
+
+                // Finding event mapping
+                for (var event in currentTypes) {
+                    if (currentTypes.hasOwnProperty(event)) {
+                        for (var i = 0; i < currentTypes[event].length; i++) {
+                            if (string.startsWith(currentTypes[event][i])) {
+                                // Match!
+                                this.event = event;
+                            }
+                        }
+                    }
+                }
+
+                return this.randomContextualAnswer(this.event) + this.checkForResumeTime(string);
+            },
+
+
+            //////////
+            // Contextual answer
+            //////////
+            randomContextualAnswer: function (eventContext) {
+                var rand = Math.floor(Math.random() * this.answers[this.service][eventContext].length);
+                return this.answers[this.service][eventContext][rand];
+            },
+
+            // Add resume time text
+            checkForResumeTime: function (text) {
+                var matched = text.match(/[0-2]*[0-9]h?:?[0-6][0-9]/g);;
+
+                console.log("this was matched " + matched);
+                if (matched !== null && matched[0]) {
+                    return " The service expected to resume at " + matched[0];
+                }
+                return "";
+            }
+
+        };
+
+
+        //////////
+        // Twitter requests handler
+        //////////
+        var TwitterHandler = {
+
+            // screen_name is the twitter handle of the wanted twitter account
+            // count is the number of tweet that will be returned,
+            //
+            params: {
+                screen_name: 'stm_Orange',  // Defaut twitter handle
+                count: 1,
+                exclude_replies: true
+            },
+
+            run: function (handle) {      
+            return this.twitterWrapper(handle)
+            },
+
+            twitterWrapper: function (handle) {
+            return new Promise ( (res,rej) => {
+                res('ok')
+                let config = {
+                "consumer_key" : process.env.consumer_key, 
+                "consumer_secret":  process.env.consumer_secret,
+                "access_token" : process.env.access_token,  
+                "access_token_secret" : process.env.access_token_secret 
+                }
+                config = require('./config.json')
+                const T = new Twit(config);
+                this.params.screen_name = handle;
+            
+                T.get('/statuses/user_timeline', this.params, (err,data) => {
+                var input = data[0].text;
+                var alexaResponse = Main.read(input);
+                res(alexaResponse)
+                });
+            })
+            }
+
+        };
+
         /*
           {"color_line":{"name":"color_line","value":"orange","confirmationStatus":"NONE","source":"USER"}}
         */
@@ -59,14 +196,20 @@ const MetroLineHandler = {
         let twitter_handler;
 
         twitter_handler = metro_json[color];
-        if (twitter_handler == undefined) msg = "There is no " + color + "line.";
-        else msg = "Isaac says hi"
-        //else msg = Main.message(twitter_handler);
-
-
-        return handlerInput.responseBuilder
+        if (twitter_handler == undefined) {
+            msg = "There is no " + color + " line.";
+            return handlerInput.responseBuilder
             .speak(JSON.stringify(msg))
             .getResponse();
+
+        }
+        // else msg = "Isaac says hi"
+        else { 
+            return handlerInput.responseBuilder
+            .speak(twitter_handler)
+            .getResponse();
+            
+        };
     },
 };
 
@@ -130,142 +273,20 @@ const HELP_MESSAGE = 'You can ask for a metro line, or, you can say exit... What
 const HELP_REPROMPT = 'What can I help you with?';
 const STOP_MESSAGE = 'Goodbye!';
 
-///////////////////
-// MAIN
 
-let Main = {
-
-    service: "metro",   // defaut service context
-    event: "normal",    // defaut event reading
-
-    //////////
-    // Initialization
-    //////////
-    init: function () {
-        this.types = require("./data/types.json");
-        this.answers = require("./data/answers.json");
-        
-        this.loaded = true;
-    },
-
-
-    // Main interfacing communication
-    message: function (twitter_handle, service) {
-        if (typeof service !== "undefined")
-            this.service = service;
-
-        if (!this.loaded)
-            this.init();
-
-        TwitterHandler.run(twitter_handle);     // Response is sent back by the callback
-    },
-
-
-    // Interprets a tweets and returns an corresponding vocal message
-    //////////
-    read: function (string) {
-        if (!this.loaded)
-            this.init();
-
-        if (typeof string !== "string")
-            return "Value is not a string";
-
-        // Types depending on current service context
-        let currentTypes = this.types[this.service];
-        string = string.trim().toLowerCase();
-
-
-        // Check for ignored starting string
-        for (var i = 0; i < currentTypes["ignoring"].length; i++) {
-            if (string.startsWith(currentTypes["ignoring"][i])) {
-                // Remove ignoring part
-                string = string.replace(currentTypes["ignoring"][i], "");
-            }
-        }
-        string = string.trim();
-
-        // Finding event mapping
-        for (var event in currentTypes) {
-            if (currentTypes.hasOwnProperty(event)) {
-                for (var i = 0; i < currentTypes[event].length; i++) {
-                    if (string.startsWith(currentTypes[event][i])) {
-                        // Match!
-                        this.event = event;
-                    }
-                }
-            }
-        }
-
-        return this.randomContextualAnswer(this.event) + this.checkForResumeTime(string);
-    },
-
-
-    //////////
-    // Contextual answer
-    //////////
-    randomContextualAnswer: function (eventContext) {
-        var rand = Math.floor(Math.random() * this.answers[this.service][eventContext].length);
-        return this.answers[this.service][eventContext][rand];
-    },
-
-    // Add resume time text
-    checkForResumeTime: function (text) {
-        var matched = text.match(/[0-2]*[0-9]h?:?[0-6][0-9]/g);;
-
-        console.log("this was matched " + matched);
-        if (matched !== null && matched[0]) {
-            return " The service expected to resume at " + matched[0];
-        }
-        return "";
-    }
-
-};
-
-
-//////////
-// Twitter requests handler
-//////////
-var TwitterHandler = {
-
-    // screen_name is the twitter handle of the wanted twitter account
-    // count is the number of tweet that will be returned,
-    //
-    params: {
-        screen_name: 'stm_Orange',  // Defaut twitter handle
-        count: 1,
-        exclude_replies: true
-    },
-
-    run: function (handle) {
-
-      let config = {
-        "consumer_key" : process.env.consumer_key, 
-        "consumer_secret":  process.env.consumer_secret,
-        "access_token" : process.env.access_token,  
-        "access_token_secret" : process.env.access_token_secret 
-      }
-        const T = new Twit(config);
-        this.params.screen_name = handle;
-        T.get('/statuses/user_timeline', this.params, this.callback);
-    },
-
-    callback: function (err, data) {
-        var input = data[0].text;
-        var alexaResponse = Main.read(input);
-        console.log("Analysed : " + input);
-        console.log("Response : " + alexaResponse);     // TODO: Return to Jon
-    },
-};
 
 const skillBuilder = Alexa.SkillBuilders.standard();
 
-exports.handler = skillBuilder
-    .addRequestHandlers(
-        HelpHandler,
-        ExitHandler,
-        SessionEndedRequestHandler,
-        MetroLineHandler,
-        LaunchRequestHandler
-    )
-    .addErrorHandlers(ErrorHandler)
-    .lambda();
+exports.handler = async (event, context) => {
+    if(!skill) {
+        skill = Alexa.SkillBuilders.custom()
+            .addRequestHandlers(
+                FrontpageDealsHandler,
+                AboutHandler
+            )
+            .addErrorHandlers(ErrorHandler)
+            .create();
+    }
+    var response = await skill.invoke(event, context);
+    return response;
+};
