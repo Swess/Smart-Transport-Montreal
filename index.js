@@ -54,7 +54,6 @@ const MetroLineHandler = {
                     this.init();
 
                 return TwitterHandler.run(twitter_handle)
-
             },
 
             // Interprets a tweets and returns an corresponding vocal message
