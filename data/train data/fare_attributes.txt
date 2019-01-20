@@ -1,0 +1,8 @@
+fare_id,price,currency_type,payment_method,transfers
+ZONE_1,4.00,CAD,1,0
+ZONE_2,4.75,CAD,1,0
+ZONE_3,5.75,CAD,1,0
+ZONE_4,6.25,CAD,1,0
+ZONE_5,7.00,CAD,1,0
+ZONE_6,8.50,CAD,1,0
+ZONE_7,9.75,CAD,1,0
