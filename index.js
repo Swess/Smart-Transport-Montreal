@@ -209,6 +209,39 @@ const MetroLineHandler = {
     },
 };
 
+const MetroFactHandler = {
+    canHandle(handlerInput) {
+        const request = handlerInput.requestEnvelope.request;
+        return request.type === 'IntentRequest'
+            && request.intent.name === 'MetroFactIntent';
+    },  
+    handle(handlerInput) {
+        const prefix = "Did you know: " 
+        const data = [
+            'The first Metro network was completed with the public opening of the Yellow Line on April 28, 1967.',
+            'In a single year, 416.5 million trips are made across the STM network',
+            'On average 1.3 million trips per day are made, 40% by metro, bus 31% and 29% by a combo of the two.',
+            'Every day 895, 000 people take the metro, while 784, 000 take the bus',
+            'The busiest metro station is Berri-UQAM',
+            'The deepest station in the network is Charlevoix.',
+            'Montreal metro was the first on the planet to run only on rubber tires.',
+            'To build the metro back in the sixties cost the city $213.7 million',
+            'In total, the metro is made up of 71 kilometers of track, 65.33 of which are usable by passengers.',
+            'Each metro car is 2.5 metres wide.',
+            'At full length a metro train measures in at 500 feet, which is the exact same length as a metro station platform.',
+            'On the island of Montreal, the longest distance between two stations is 1.45km, from Place Saint-Henri to Vendôme.'
+        ]
+
+        let content = data[ Math.floor(Math.random() * data.length)];
+
+        let speech_text = prefix + content;
+
+        return handlerInput.responseBuilder
+            .speak(speech_text)
+            .getResponse()
+    }
+}
+
 const HelpHandler = {
     canHandle(handlerInput) {
         const request = handlerInput.requestEnvelope.request;
@@ -278,6 +311,7 @@ exports.handler =
     .addRequestHandlers(
         HelpHandler,
         ExitHandler,
+        MetroFactHandler,
         SessionEndedRequestHandler,
         MetroLineHandler,
         LaunchRequestHandler
