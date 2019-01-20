@@ -62,7 +62,8 @@ const MetroLineHandler = {
 
         twitter_handler = metro_json[color];
         if (twitter_handler == undefined) msg = "There is no " + color + "line.";
-        else msg = Main.message(twitter_handler);
+        else msg = "Isaac says hi"
+        //else msg = Main.message(twitter_handler);
 
 
         return handlerInput.responseBuilder
@@ -249,11 +250,6 @@ var TwitterHandler = {
         console.log("Response : " + alexaResponse);     // TODO: Return to Jon
     },
 };
-
-
-// Actual twitter request
-Main.message("Haboub72903512");
-
 
 const skillBuilder = Alexa.SkillBuilders.standard();
 
