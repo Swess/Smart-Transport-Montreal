@@ -1,27 +1,74 @@
-{
+{   
+    "guy concordia" : {
+        "start" : "05:51",
+        "end" : "01:03",
+        "interval" : "The next metro will pass between 3 to 4 minutes"       
+    },
+    
+    "université de Montréal" : {
+        "start" : "05:42",
+        "end" : "00:57",
+        "interval" : "The next metro will pass between 3 to 5 minutes"         
+    },
+    
+    "berri uqam" : {
+        "start" : "05:30",
+        "end" : "01:00",
+        "interval" : "The next metro will pass between 3 to 5 minutes"
+    },
+    
+    "angrignon" : {
+        "start" : "05:30",
+        "end" : "00:35",
+        "interval" : "The next metro will pass between 3 to 4 minutes"       
+    },
+    
+    "monk" : {
+        "start" : "06:03",
+        "end" : "01:15",
+        "interval" : "The next metro will pass between 3 to 4 minutes"       
+    },
+    
+    "snowdon" : {
+        "start" : "05:38",
+        "end" : "01:14",
+        "interval" : "The next metro will pass between 2 to 4 minutes"       
+    },
+    
+    "verdun" : {
+        "start" : "06:00",
+        "end" : "01:12",
+        "interval" : "The next metro will pass between 3 to 4 minutes"       
+    },
+    
+    "atwater" : {
+        "start" : "05:53",
+        "end" : "00:38",
+        "interval" : "The next metro will pass between 3 to 4 minutes"       
+    },
+    
     "yellow" : {
         "start" : "05:30",
         "end" : "01:00",
-        "interval" : "3 to 5 minutes"       
+        "interval" : "The next metro will pass between 3 to 5 minutes"       
     },
     
     "green" : {
         "start" : "05:30",
         "end" : "00:35",
-        "interval" : "3 to 4 minutes"       
+        "interval" : "The next metro will pass between 3 to 4 minutes"       
     },
 
     "orange" : {
         "start" : "05:30",
         "end" : "00:30",
-        "interval" : "2 to 4 minutes"       
+        "interval" : "The next metro will pass between 2 to 4 minutes"       
     },
 
     "blue" : {
         "start" : "05:30",
         "end" : "00:45",
-        "interval" : "3 to 5 minutes"       
+        "interval" : "The next metro will pass between 3 to 5 minutes"       
     }
-
 
 }
