@@ -23,7 +23,7 @@ const MetroLineHandler = {
         return request.type === "CanFulfillIntentRequest" || (request.type === 'IntentRequest'
             && request.intent.name === 'MetroLineIntent');
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         const slots = handlerInput.requestEnvelope.request.intent.slots;
 
         ///////////////////
@@ -53,11 +53,7 @@ const MetroLineHandler = {
                 if (!this.loaded)
                     this.init();
 
-                TwitterHandler.run(twitter_handle).then(
-                    (ans) => {
-                        return JSON.stringify(ans);
-                    }
-                );     // Response is sent back by the callback
+                return TwitterHandler.run(twitter_handle)
 
             },
 
@@ -142,7 +138,6 @@ const MetroLineHandler = {
 
             twitterWrapper: function (handle) {
             return new Promise ( (res,rej) => {
-                res('ok')
                 let config = {
                 "consumer_key" : process.env.consumer_key, 
                 "consumer_secret":  process.env.consumer_secret,
@@ -205,8 +200,9 @@ const MetroLineHandler = {
         }
         // else msg = "Isaac says hi"
         else { 
+            let x = await Main.message(twitter_handler)
             return handlerInput.responseBuilder
-            .speak(twitter_handler)
+            .speak(x)
             .getResponse();
             
         };
@@ -277,16 +273,14 @@ const STOP_MESSAGE = 'Goodbye!';
 
 const skillBuilder = Alexa.SkillBuilders.standard();
 
-exports.handler = async (event, context) => {
-    if(!skill) {
-        skill = Alexa.SkillBuilders.custom()
-            .addRequestHandlers(
-                FrontpageDealsHandler,
-                AboutHandler
-            )
-            .addErrorHandlers(ErrorHandler)
-            .create();
-    }
-    var response = await skill.invoke(event, context);
-    return response;
-};
+exports.handler = 
+    skillBuilder
+    .addRequestHandlers(
+        HelpHandler,
+        ExitHandler,
+        SessionEndedRequestHandler,
+        MetroLineHandler,
+        LaunchRequestHandler
+    )
+    .addErrorHandlers(ErrorHandler)
+    .lambda() 
